@@ -3,7 +3,7 @@ Codeacademy Section 31
 
 For this project, you will build an e-commerce application REST API using your knowledge of server-side web development. E-commerce applications are ubiquitous online and make up the back-bone of online business, making the skills used to build them invaluable for any budding entrepreneur or developer. This project requires that you build a fully-functioning e-commerce application REST API that allows users to perform various CRUD operations such as registering an account, browsing products for sale, etc.
 
-###Project Objectives:
+###Project Objectives:###
  - Build a functioning e-commerce REST API using Express, Node.js, and Postgres
  - Allow users to register and log in via the API
  - Allow CRUD operations on products
@@ -17,7 +17,7 @@ For this project, you will build an e-commerce application REST API using your k
  - Document the API using Swagger
  - Deploy API live to Heroku
  
-###Prerequisites:
+##Prerequisites:##
  - JavaScript
  - Git and GitHub
  - Command line
