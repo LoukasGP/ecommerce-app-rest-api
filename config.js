@@ -10,6 +10,6 @@ module.exports = {
         PGPASSWORD: process.env.PGPASSWORD, //behaves the same as the password connection parameter
         PGPORT: process.env.PGPORT //behaves the same as the port connection parameter
     },
-    SESSION_SECRET: process.env.SESSION_SECRET
+    SESSION_SECRET: process.env.SESSION_SECRET //needed for express-session
 } 
 
