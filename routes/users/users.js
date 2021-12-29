@@ -1,6 +1,6 @@
 const express = require("express");
 const userAccountRouter = express.Router();
-
+const bodyParser = require('body-parser');
 
 userAccountRouter.get('/', (req,res) => {
     res.send('users')
