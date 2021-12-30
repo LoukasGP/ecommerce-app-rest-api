@@ -1,0 +1,1 @@
+// checks if the user exists and rejects if they don't
