@@ -1,6 +1,6 @@
 CREATE TABLE user (
   id int,
-  password char(50),
+  password varchar(50),
   email varchar(50),
   first_name varchar(50),
   last_name varchar(50),
@@ -11,8 +11,8 @@ CREATE TABLE user (
 
 CREATE TABLE order (
   id int,
-  total <type>,
-  status <type>,
+  total int,
+  status char(3),
   user_id int,
   created getDate(),
   modified timestamp,
