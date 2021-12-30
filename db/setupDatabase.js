@@ -6,7 +6,7 @@ const { DB } = require('./config');
 (async () => { //everything needs to be async/await to get the database first, and then add the tables
     const userTable = `
     CREATE TABLE IF NOT EXISTS user (
-        id INT,
+        id CHAR(20) UNIQUE,
         password VARCHAR(50),
         email VARCHAR(50),
         first_name VARCHAR(50),
@@ -15,7 +15,7 @@ const { DB } = require('./config');
         modified TIMESTAMP,
         PRIMARY KEY (id)
     );`
-    
+    // had to change id to char to make it so it would generate ids randomly 
     const orderTable = `
     CREATE TABLE IF NOT EXISTS order (
         id INT,
