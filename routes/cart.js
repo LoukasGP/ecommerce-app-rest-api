@@ -5,9 +5,9 @@ cartRouter.get('/', (req,res) => {
     res.send('carts')
 });
 
-//View their cart
+// View their cart
 // View cart items
-//Checkout
+// Checkout
 
 
 module.exports = cartRouter;
