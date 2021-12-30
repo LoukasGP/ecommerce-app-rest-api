@@ -9,6 +9,4 @@ const pool = new Pool ({
     port: DB.PGPORT, 
 });
 
-pool.connect()
-
 module.exports = pool
