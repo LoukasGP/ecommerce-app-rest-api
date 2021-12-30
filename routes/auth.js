@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const {pool} = require('../config')
-const bcrypt = require('bcrypt');
 
 //Registration - can they register, or do have they already an account
 
 // checking to see if user with that email exists
-const UserByEmailExists = async (email) => {
+const UserByEmailExists =  (email) => {
     pool.query("SELECT COUNT(*) AS cnt FROM user WHERE email = ? ", body.email,
     function(err, data){
         if (err){
@@ -24,7 +23,7 @@ const UserByEmailExists = async (email) => {
 
 }
 
-//create a password hasher
+
 
 
 

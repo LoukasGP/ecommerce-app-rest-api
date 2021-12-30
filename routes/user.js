@@ -3,6 +3,8 @@ const userAccountRouter = express.Router();
 const bodyParser = require('body-parser');
 const {UserByEmailExists} = require('./auth');
 const { pool } = require("../config");
+const bcrypt = require('bcrypt');
+
 
 /*
 I think you can avoid using body-parser for parsing the body of POST request since that can also be done using the express module as well.
@@ -19,16 +21,24 @@ p.s. Not all functionalities of body parse are present in the express. Refer doc
 // logic for handling a new user registration
 userAccountRouter.post('/' , (res ,req) => {
     const {email,first_name,last_name,password} = req.body
-    if (UserByEmailExists === true) {
+    if (UserByEmailExist(email) === true) {
         return res.status(422).json({
             error: { status: 422, data: "User with this email already exists."}
         })
     } else {
-        pool.query('INSERT INTO users (first_name , last_name, password ,email) VALUES ($1, $2 , $3 , $4 )' )
-        // need to hash the password before sticking it in the database 
+       const hashedPassword = await bcrypt.hash(password, 10);
+       pool.query('INSERT INTO users (first_name , last_name, password ,email) VALUES ($1, $2 , $3 , $4 )' , [first_name , last_name, hashedPassword , email ] ,
+        (err) => {
+            if (err){
+                throw err
+            }
+            response.status(201).json({ status: 'success', message: 'Account added.' })
+        }  )
+        
     }
 })
-  
+ 
+
 
 
 
