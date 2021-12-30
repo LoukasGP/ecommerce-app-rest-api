@@ -92,18 +92,7 @@ const { DB } = require('./config');
       await database.query(orderItemTable);
       await database.query(cartTable);
       await database.query(cartItemTable);
-
-const text = `INSERT INTO userTable(id, password, email, first_name, last_name) VALUES($1, $2, $3, $4, $5) RETURNING *`
-const values = ['1', 'test_password', 'brian.m.carlson@gmail.com', 'brian', 'peterson']
-
-      database.query( text, values, (err, res) => {
-        if (err) {
-          console.log(err.stack)
-        } else {
-          console.log(res.rows[0])
-        }
-      })
-
+      
       database.end(err => { //Disconnects the client from the PostgreSQL server
         console.log('client has disconnected')
         if (err) {
