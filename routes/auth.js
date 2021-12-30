@@ -6,7 +6,7 @@ const {pool} = require('../config')
 
 // checking to see if user with that email exists
 const UserByEmailExists =  (email) => {
-    pool.query("SELECT COUNT(*) AS cnt FROM user WHERE email = ? ", body.email,
+    pool.query("SELECT COUNT(*) AS cnt FROM user WHERE email = ? ", [email],
     function(err, data){
         if (err){
             console.log(err)
@@ -19,8 +19,6 @@ const UserByEmailExists =  (email) => {
             }
         }
     })
-
-
 }
 
 
@@ -28,5 +26,7 @@ const UserByEmailExists =  (email) => {
 
 
 //Login - can they login? Do they have an account?
+
+
 
 module.exports = UserByEmailExists

@@ -1,9 +1,9 @@
 const express = require("express");
 const userAccountRouter = express.Router();
-const bodyParser = require('body-parser');
-const {UserByEmailExists} = require('./auth');
+const UserByEmailExists = require('./auth');
 const { pool } = require("../config");
 const bcrypt = require('bcrypt');
+const shortId = Date.now() // generate a random id
 
 
 /*
@@ -19,20 +19,21 @@ p.s. Not all functionalities of body parse are present in the express. Refer doc
 */
 
 // logic for handling a new user registration
-userAccountRouter.post('/' , (res ,req) => {
-    const {email,first_name,last_name,password} = req.body
-    if (UserByEmailExist(email) === true) {
+userAccountRouter.post('/' , (req,res) => {
+    const {email,first_name,last_name,password } = req.body
+    
+    if (UserByEmailExists(email) === true) {
         return res.status(422).json({
             error: { status: 422, data: "User with this email already exists."}
         })
     } else {
-       const hashedPassword = await bcrypt.hash(password, 10);
-       pool.query('INSERT INTO users (first_name , last_name, password ,email) VALUES ($1, $2 , $3 , $4 )' , [first_name , last_name, hashedPassword , email ] ,
+       const hashedPassword =  bcrypt.hash(password, 10);
+       pool.query('INSERT INTO users (first_name , last_name, password ,email,id) VALUES ($1, $2 , $3 , $4 , $5)' , [email,first_name , last_name, hashedPassword ,shortId ] ,
         (err) => {
             if (err){
                 throw err
             }
-            response.status(201).json({ status: 'success', message: 'Account added.' })
+            res.status(201).json({ status: 'success', message: 'Account added.' })
         }  )
         
     }

@@ -59,5 +59,3 @@ CREATE TABLE cart_item (
 );
 
 -- insert test
-INSERT INTO users (id,first_name,last_name)
-VALUES (1,'Emma','Secrest');

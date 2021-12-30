@@ -1,7 +1,10 @@
 const express = require('express')
 const app = express();
-
+const bodyParser = require('body-parser');
 const routerIndex = require('./routes/index')
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
 
 const router = require('./routes/routes')
 require('dotenv').config() //loads the dotenv package
