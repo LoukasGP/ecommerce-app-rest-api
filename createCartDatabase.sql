@@ -58,3 +58,6 @@ CREATE TABLE cart_item (
   FOREIGN KEY (cart_id) REFERENCES cart(id)
 );
 
+-- insert test
+INSERT INTO users (id,first_name,last_name)
+VALUES (1,'Emma','Secrest');

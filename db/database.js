@@ -1,3 +1,5 @@
+
+
 const { Client } = require('pg');
 
 const client = new Client ({
@@ -10,6 +12,7 @@ const client = new Client ({
 });
 
 
+
 client.on("connect", () => {
     console.log("database connected")
 });
@@ -17,5 +20,9 @@ client.on("connect", () => {
 client.on("end", () => {
     console.log("connection ended")
 });
+
+
+
+
 
 module.exports = client
