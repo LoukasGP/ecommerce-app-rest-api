@@ -14,6 +14,10 @@ p.s. Not all functionalities of body parse are present in the express. Refer doc
 
 */
 
+// logic for handling a new user registration
+
+
+
 userAccountRouter.get('/', (req,res) => {
     res.send('users')
 });
