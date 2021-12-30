@@ -1,56 +1,70 @@
+CREATE TABLE user (
+  id int,
+  password char(50),
+  email varchar(50),
+  first_name varchar(50),
+  last_name varchar(50),
+  created getData(),
+  modified timestamp,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE order (
+  id int,
+  total <type>,
+  status <type>,
+  user_id int,
+  created getDate(),
+  modified timestamp,
+  PRIMARY KEY (id),
+  CONSTRAINT FK_order.user_id
+    FOREIGN KEY (user_id)
+      REFERENCES user(id)
+);
+
+CREATE TABLE product (
+  id int,
+  name varchar(100),
+  description varchar(250),
+  created getDate(),
+  modified timestamp,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE order_item (
+  id int,
+  quantity int,
+  price money,
+  order_id int,
+  product_id int,
+  created getDate(),
+  modified timestamp,
+  PRIMARY KEY (id),
+  CONSTRAINT FK_order_item.order_id
+    FOREIGN KEY (order_id)
+      REFERENCES order(id),
+  CONSTRAINT FK_order_item.product_id
+    FOREIGN KEY (product_id)
+      REFERENCES product(id)
+);
+
 CREATE TABLE cart (
   id int,
-  customer_id int,
+  created getDate(),
+  modified timestamp,
   PRIMARY KEY (id)
 );
 
-CREATE TABLE address (
-  id int,
-  customer_id int,
-  name varchar(50),
-  number varchar(50),
-  streetname varchar(50),
-  town varchar(50),
-  city_id varchar(50),
-  postcode varchar(50),
-  last_update timestamp,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE city (
-  id int,
-  country_id int,
-  city char(50),
-  last_update timestamp,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE customer (
-  id int,
-  firstname varchar(30),
-  lastname varchar(30),
-  email varchar(50),
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE cart_products (
+CREATE TABLE cart_item (
   product_id int,
-  cart_id int
-);
-
-CREATE TABLE country (
-  id int,
-  country varchar(50),
-  last_update timestamp,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE products (
-  id int,
-  title varchar(50),
-  description varchar(50),
-  cost money,
-  quantity int,
-  PRIMARY KEY (id)
+  cart_id int,
+  created getDate(),
+  modified timestamp,
+  CONSTRAINT FK_cart_item.product_id
+    FOREIGN KEY (product_id)
+      REFERENCES product(id),
+  CONSTRAINT FK_cart_item.cart_id
+    FOREIGN KEY (cart_id)
+      REFERENCES cart(id)
 );
 
