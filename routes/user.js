@@ -5,6 +5,7 @@ const { pool } = require("../config");
 const bcrypt = require('bcrypt');
 
 
+// might need a separate page to log in
 
 /*
 I think you can avoid using body-parser for parsing the body of POST request since that can also be done using the express module as well.
@@ -19,14 +20,7 @@ p.s. Not all functionalities of body parse are present in the express. Refer doc
 */
 
 
-let idArray = [0];
-
-function generateId(idArray) {
-  const lastIndex = idArray.length -1;
-  const newEntry = idArray[lastIndex] +1 // this would work on an actual server
-  idArray.push(newEntry)
-  return newEntry;
-}
+// not working need to change so that the numbers are added automatically in sql
 
 // logic for handling a new user registration
 userAccountRouter.post('/' , (req,res) => {
@@ -41,7 +35,7 @@ userAccountRouter.post('/' , (req,res) => {
         }) 
     } else {
         bcrypt.hash(password, 10, function(err, hash) {
-            pool.query('INSERT INTO users (email,first_name,last_name,password ,id) VALUES ($1, $2 , $3 , $4 , $5)' , [email, first_name , last_name, hash ,generateId(idArray) ] ,
+            pool.query('INSERT INTO users (email,first_name,last_name,password ) VALUES ($1, $2 , $3 , $4)' , [email, first_name , last_name, hash  ] ,
             (err) => {
                 if (err){
                     throw err
