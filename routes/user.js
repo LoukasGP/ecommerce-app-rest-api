@@ -27,7 +27,7 @@ userAccountRouter.post('/' , (req,res) => {
     const {email,first_name,last_name,password } = req.body
     if (UserByEmailExists(email) === true ) {
         return res.status(422).json({
-            error: { status: 422, data: "User with this email already exists."}
+            error: { status: 422, data: "User with this email already exists."} // this isnt working 
         })
     } else if (validateEmail(email) === false) {
         return res.status(422).json({
