@@ -5,8 +5,16 @@ const {pool} = require('../config')
 //Registration - can they register, or do have they already an account
 
 // checking to see if user with that email exists
+// might want to add a check to see if it is a legit email
+
+// checking to see if it is a real email
+const validateEmail = (email) => {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
 const UserByEmailExists =  (email) => {
-    pool.query("SELECT COUNT(*) AS cnt FROM user WHERE email = ? ", [email],
+   pool.query("SELECT COUNT(*) AS cnt FROM user WHERE email = ? ", [email],
     function(err, data){
         if (err){
             console.log(err)
@@ -29,4 +37,4 @@ const UserByEmailExists =  (email) => {
 
 
 
-module.exports = UserByEmailExists
+module.exports = {UserByEmailExists ,validateEmail}
