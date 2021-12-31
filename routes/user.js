@@ -31,7 +31,6 @@ function generateId(idArray) {
 // logic for handling a new user registration
 userAccountRouter.post('/' , (req,res) => {
     const {email,first_name,last_name,password } = req.body
-    console.log(validateEmail(email))
     if (UserByEmailExists(email) === true ) {
         return res.status(422).json({
             error: { status: 422, data: "User with this email already exists."}
@@ -41,16 +40,18 @@ userAccountRouter.post('/' , (req,res) => {
             error: { status: 422, data: "Email address is not valid"}
         }) 
     } else {
-        const hashedPassword =  bcrypt.hash(password, 10);
-        console.log(hashedPassword)
-        pool.query('INSERT INTO users (email,first_name,last_name,password ,id) VALUES ($1, $2 , $3 , $4 , $5)' , [email, first_name , last_name, hashedPassword ,generateId(idArray) ] ,
-         (err) => {
-             if (err){
-                 throw err
-             }
-             res.status(201).json({ status: 'success', message: 'Account added.' })
-         }  )
-         
+        bcrypt.hash(password, 10, function(err, hash) {
+            pool.query('INSERT INTO users (email,first_name,last_name,password ,id) VALUES ($1, $2 , $3 , $4 , $5)' , [email, first_name , last_name, hash ,generateId(idArray) ] ,
+            (err) => {
+                if (err){
+                    throw err
+                }
+                res.status(201).json({ status: 'success', message: 'Account added.' })
+            }  )
+            
+        });
+       
+        
      }
  })
  

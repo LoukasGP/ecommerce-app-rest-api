@@ -14,7 +14,7 @@ const validateEmail = (email) => {
   };
 
 const UserByEmailExists =  (email) => {
-   pool.query("SELECT COUNT(*) AS cnt FROM user WHERE email = ? ", [email],
+   pool.query("SELECT COUNT(*) AS cnt FROM users WHERE email = ? ", [email],
     function(err, data){
         if (err){
             console.log(err)
