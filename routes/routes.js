@@ -14,9 +14,14 @@ router.use('/users', userAccountRouter);
 router.use('/product', productsRouter);
 router.use('/cart', cartsRouter);
 
-// router.get('/', (req, res) => {
-//     res.send('Hello World!')
-//   })
+router.get('/', (req, res) => {
+    pool.query('SELECT id FROM users' ,(err, result) =>{
+      if(err){
+        throw err;
+      }
+      res.status(201).json(result.rows)
+    })
+  })
 
   // checking the connection
  

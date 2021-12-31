@@ -3,7 +3,7 @@ const userAccountRouter = express.Router();
 const UserByEmailExists = require('./auth');
 const { pool } = require("../config");
 const bcrypt = require('bcrypt');
-const shortId = Date.now() // generate a random id
+
 
 
 /*
@@ -18,6 +18,16 @@ p.s. Not all functionalities of body parse are present in the express. Refer doc
 
 */
 
+
+let idArray = [0];
+
+function generateId(idArray) {
+  const lastIndex = idArray.length -1;
+  const newEntry = idArray[lastIndex] +1 // this would work on an actual server
+  idArray.push(newEntry)
+  return newEntry;
+}
+
 // logic for handling a new user registration
 userAccountRouter.post('/' , (req,res) => {
     const {email,first_name,last_name,password } = req.body
@@ -28,7 +38,8 @@ userAccountRouter.post('/' , (req,res) => {
         })
     } else {
        const hashedPassword =  bcrypt.hash(password, 10);
-       pool.query('INSERT INTO users (first_name , last_name, password ,email,id) VALUES ($1, $2 , $3 , $4 , $5)' , [email,first_name , last_name, hashedPassword ,shortId ] ,
+       console.log(hashedPassword)
+       pool.query('INSERT INTO users (email,first_name,last_name,password ,id) VALUES ($1, $2 , $3 , $4 , $5)' , [email, first_name , last_name, hashedPassword ,generateId(idArray) ] ,
         (err) => {
             if (err){
                 throw err
