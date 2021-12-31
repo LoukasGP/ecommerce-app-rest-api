@@ -14,14 +14,15 @@ const validateEmail = (email) => {
   };
 
 const UserByEmailExists =  (email) => {
-   pool.query("SELECT COUNT(*) AS cnt FROM users WHERE email = ? ", [email],
+   pool.query("SELECT * FROM users WHERE email = ? ", [email],
     function(err, data){
         if (err){
             console.log(err)
         } else{
-            if(data[0].cnt > 0){
+            if(data){
                 console.log('user already exists. Returning true')
                 return true;
+                
             } else {
                 return false;
             }
