@@ -31,7 +31,7 @@ userAccountRouter.post('/' , (req,res) => {
     function(err, data){
       if (err){
             console.log(err)
-        } else{
+        } else {
             if(data.rowCount > 0){
                 return res.status(422).json({
                     error: { status: 422, data: "User with this email already exists."} 
