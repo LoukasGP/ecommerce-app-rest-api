@@ -1,6 +1,6 @@
 const express = require("express");
 const userAccountRouter = express.Router();
-const {UserByEmailExists , validateEmail} = require('./auth');
+const  validateEmail = require('./auth');
 const { pool } = require("../config");
 const bcrypt = require('bcrypt');
 
