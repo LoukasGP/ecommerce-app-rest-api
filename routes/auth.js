@@ -38,4 +38,4 @@ const UserByEmailExists =  (email) => {
 
 
 
-module.exports = {UserByEmailExists ,validateEmail}
+module.exports = validateEmail;
