@@ -66,7 +66,7 @@ userAccountRegisterRouter.post('/' , (req,res) => {
 
 
 userAccountRegisterRouter.get('/', (req,res) => {
-    res.send('users')
+    
 });
 
 
