@@ -1,5 +1,5 @@
 const express = require("express");
-const userAccountRouter = express.Router();
+const userAccountRegisterRouter = express.Router();
 const validateEmail = require("./auth")
 const { pool } = require("../config");
 const bcrypt = require('bcrypt');
@@ -24,12 +24,13 @@ p.s. Not all functionalities of body parse are present in the express. Refer doc
 // not working need to change so that the numbers are added automatically in sql
 
 // logic for handling a new user registration
-userAccountRouter.post('/' , (req,res) => {
+userAccountRegisterRouter.post('/' , (req,res) => {
     const {email,first_name,last_name,password } = req.body
     
     pool.query("SELECT * FROM users WHERE email = $1 ", [email],
     function(err, data){
-      if (err){
+        console.log(data);
+        if (err){
             console.log(err)
         } else {
             if(data.rowCount > 0){
@@ -64,9 +65,9 @@ userAccountRouter.post('/' , (req,res) => {
 
 
 
-userAccountRouter.get('/', (req,res) => {
+userAccountRegisterRouter.get('/', (req,res) => {
     res.send('users')
 });
 
 
-module.exports = userAccountRouter;
+module.exports = userAccountRegisterRouter;

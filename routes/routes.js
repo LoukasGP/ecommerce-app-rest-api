@@ -1,6 +1,7 @@
-const userAccountRouter = require('./user');
+const userAccountRegisterRouter = require('./user');
 const productsRouter = require('./product');
 const cartsRouter = require('./cart');
+const loginRouter = require('./login')
 const {pool} = require('../config')
 
 
@@ -10,9 +11,10 @@ const router = express();
 
 
 
-router.use('/users', userAccountRouter);
+router.use('/userRegister', userAccountRegisterRouter);
 router.use('/product', productsRouter);
 router.use('/cart', cartsRouter);
+router.use('/login', loginRouter);
 
 router.get('/', (req, res) => {
     pool.query('SELECT id FROM users' ,(err, result) =>{
