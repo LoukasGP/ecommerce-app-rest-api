@@ -58,17 +58,28 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
+// need to use express-session or JWT to stay logged in
 
-loginRouter.post('/',
-  passport.authenticate('login'),
-  function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    console.log(req.user)
-    res.send('Login successful!');
+// loginRouter.post('/',
+//   passport.authenticate('login'),
+//   function(req, res ,message) {
+    
+    
+    
+//     res.send('Login successful!');
    
+//   });
+  loginRouter.post('/', function(req, res, next) {
+    passport.authenticate('login', function(err, user, info) {
+      if (err) { return next(err); }
+      if (!user) { 
+          res.status(401);
+          res.end(info.message);
+          return;
+      }
+      res.send(info.message)
+    })(req, res, next);
   });
-
   
 
 
