@@ -2,11 +2,9 @@ const userAccountRegisterRouter = require('./user');
 const productsRouter = require('./product');
 const cartsRouter = require('./cart');
 const loginRouter = require('./login')
-const {pool} = require('../config')
 
 
 const express = require('express');
-const res = require('express/lib/response');
 const router = express();
 
 

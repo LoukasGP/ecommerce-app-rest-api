@@ -6,8 +6,9 @@ const loginRouter = require('./login')
 const passport = require('passport')
 
 const express = require('express');
-const { append } = require('express/lib/response');
 const router = express();
+
+
 
 router.use('/userRegister', userAccountRegisterRouter);
 router.use('/product', productRouter);

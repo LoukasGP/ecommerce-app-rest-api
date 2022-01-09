@@ -6,6 +6,9 @@ const bcrypt = require('bcrypt');
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 
+// express session
+
+
 passport.use('login',new localStrategy({
     usernameField: 'email',
     passwordField: 'password',
@@ -55,28 +58,18 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-// express session
-let session = require('express-session');
-const cookieParser = require("cookie-parser");
-const cookieTime = 60000 * 60 * 24;
 
-loginRouter.use(session({
-  secret: 'secret',
-  resave:true,
-  saveUninitialized: false,
-  cookie: {
-    secure: true,
-    maxAge: cookieTime
-  }
-}))
+ // access the option to save 
+// loginRouter.use(function(req,res,next){
+//   if(req.isAuthenticated){
+//       //req.isAuthenticated() will return true if user is logged in
+//       next();
+//   } else{
+//       res.redirect("/");
+//   }
+// })
 
-loginRouter.use(cookieParser()); // access the option to save 
 
-loginRouter.get('/' , (req,res) => {
-  session = req.session;
-  session.useId = req.body.usernameField
-  res.send('Cookies stored')
-})
 
 // logging out
 loginRouter.get('/logout' , (req,res) => {
@@ -94,8 +87,18 @@ loginRouter.post('/', function(req, res, next) {
           res.end(info.message);
           return;
       }
-      res.send(info.message)
-    })(req, res, next);
+      req.login(user,function(err){
+        if(err){
+          console.log(err)
+          return res.status(500).json({
+            err: 'Could not log in user'
+        })
+        }
+        req.session.id
+        req.session.cookie
+        res.send(info.message)
+      })
+      })(req, res, next);
   });
   
 
