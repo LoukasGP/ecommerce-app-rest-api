@@ -7,7 +7,13 @@ const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 
 // express session
-
+loginRouter.use(function(req,res,next){
+  if(req.isAuthenticated){
+      next();
+  } else{
+      res.redirect("/");
+  }
+})
 
 passport.use('login',new localStrategy({
     usernameField: 'email',
@@ -59,24 +65,25 @@ passport.deserializeUser(function(user, done) {
 });
 
 
- // access the option to save 
-// loginRouter.use(function(req,res,next){
-//   if(req.isAuthenticated){
-//       //req.isAuthenticated() will return true if user is logged in
-//       next();
-//   } else{
-//       res.redirect("/");
-//   }
-// })
+ 
+
 
 
 
 // logging out
-loginRouter.get('/logout' , (req,res) => {
-  req.session.destroy()
-  
-  res.redirect('/')
-  
+loginRouter.delete('/logout' , (req,res) => {
+  if (req.sessionID) {
+    req.session.destroy(err => {
+      if (err) {
+        res.status(400).send('Unable to log out')
+      } else {
+        console.log(req.user)
+        res.redirect('/')
+      }
+    });
+  } else {
+    res.end()
+  }
 })
 
 loginRouter.post('/', function(req, res, next) {
