@@ -5,9 +5,6 @@ const bcrypt = require('bcrypt');
 // login imports
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
-const res = require('express/lib/response');
-// const JwtStrategy = require('passport-jwt').Strategy;
-// const ExtractJWT = require('passport-jwt').ExtractJwt;
 
 passport.use('login',new localStrategy({
     usernameField: 'email',
@@ -58,18 +55,38 @@ passport.deserializeUser(function(user, done) {
   done(null, user);
 });
 
-// need to use express-session or JWT to stay logged in
+// express session
+let session = require('express-session');
+const cookieParser = require("cookie-parser");
+const cookieTime = 60000 * 60 * 24;
 
-// loginRouter.post('/',
-//   passport.authenticate('login'),
-//   function(req, res ,message) {
-    
-    
-    
-//     res.send('Login successful!');
-   
-//   });
-  loginRouter.post('/', function(req, res, next) {
+loginRouter.use(session({
+  secret: 'secret',
+  resave:true,
+  saveUninitialized: false,
+  cookie: {
+    secure: true,
+    maxAge: cookieTime
+  }
+}))
+
+loginRouter.use(cookieParser()); // access the option to save 
+
+loginRouter.get('/' , (req,res) => {
+  session = req.session;
+  session.useId = req.body.usernameField
+  res.send('Cookies stored')
+})
+
+// logging out
+loginRouter.get('/logout' , (req,res) => {
+  req.session.destroy()
+  
+  res.redirect('/')
+  
+})
+
+loginRouter.post('/', function(req, res, next) {
     passport.authenticate('login', function(err, user, info) {
       if (err) { return next(err); }
       if (!user) { 

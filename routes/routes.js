@@ -17,12 +17,7 @@ router.use('/cart', cartsRouter);
 router.use('/login', loginRouter);
 
 router.get('/', (req, res) => {
-    pool.query('SELECT id FROM users' ,(err, result) =>{
-      if(err){
-        throw err;
-      }
-      res.status(201).json(result.rows)
-    })
+    res.send('At Homepage');
   })
 
   // checking the connection

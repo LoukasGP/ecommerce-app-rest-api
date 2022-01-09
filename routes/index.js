@@ -20,8 +20,6 @@ router.use(passport.initialize());
 router.use(passport.session());
 
 
-router.get('/', (req, res) => {
-    res.send('Hello World!')
-  })
+
 
 module.exports = router
