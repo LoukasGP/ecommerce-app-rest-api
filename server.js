@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const passport = require('passport');
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+
 
 
 let session = require('express-session');
@@ -22,6 +22,7 @@ app.use(session({
 }))
 app.use(passport.session())
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({extended: true}));
 
 
 require('dotenv').config() //loads the dotenv package
