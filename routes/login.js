@@ -59,24 +59,10 @@ passport.deserializeUser(function(user, done) {
 });
 
 
- // access the option to save 
-// loginRouter.use(function(req,res,next){
-//   if(req.isAuthenticated){
-//       //req.isAuthenticated() will return true if user is logged in
-//       next();
-//   } else{
-//       res.redirect("/");
-//   }
-// })
-
-
-
 // logging out
 loginRouter.get('/logout' , (req,res) => {
   req.session.destroy()
-  
   res.redirect('/')
-  
 })
 
 loginRouter.post('/', function(req, res, next) {
