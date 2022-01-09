@@ -2,14 +2,24 @@ const express = require('express');
 const loginRouter = express.Router();
 const {pool} = require('../config');
 const bcrypt = require('bcrypt');
+
 // login imports
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 
+
+
 // express session
+function ensureAuthentication(req,res,next){
+  console.log(req.isAuthenticated())
+  if(req.isAuthenticated()){
+      next();
+  } else{
+      res.send("A Problem has occurred")
+  }
+} // always comes out false for some reason
 
-
-passport.use('login',new localStrategy({
+passport.use('login' ,new localStrategy({
     usernameField: 'email',
     passwordField: 'password',
     passReqToCallback: true
@@ -59,13 +69,26 @@ passport.deserializeUser(function(user, done) {
 });
 
 
+ 
 // logging out
-loginRouter.get('/logout' , (req,res) => {
-  req.session.destroy()
-  res.redirect('/')
+loginRouter.delete('/logout',ensureAuthentication  ,(req,res) => {
+  // ß
+  if (req.sessionID) {
+    req.session.destroy(err => {
+       
+      if (err) {
+        res.status(400).send('Unable to log out')
+      } else {
+        res.redirect('/')
+      }
+    });
+  } else {
+    res.end()
+  }
+
 })
 
-loginRouter.post('/', function(req, res, next) {
+loginRouter.post('/' ,function(req, res, next) {
     passport.authenticate('login', function(err, user, info) {
       if (err) { return next(err); }
       if (!user) { 
@@ -89,7 +112,14 @@ loginRouter.post('/', function(req, res, next) {
   
 
 
+  const accountRouter = express.Router()
+  loginRouter.use('/account' ,accountRouter)
 
+  accountRouter.get('/' ,ensureAuthentication ,(req,res) => {
+    //this will not be seen
+
+    res.send('secret')
+  })
 
 
 module.exports = loginRouter;
