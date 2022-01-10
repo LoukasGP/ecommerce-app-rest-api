@@ -1,10 +1,8 @@
 const express = require("express");
-const userAccountRouter = express.Router();
+const userRouter = express.Router();
 const  validateEmail = require('./auth');
 const { pool } = require("../config");
 const bcrypt = require('bcrypt');
-
-
 
 // might need a separate page to log in
 
@@ -24,7 +22,7 @@ p.s. Not all functionalities of body parse are present in the express. Refer doc
 // not working need to change so that the numbers are added automatically in sql
 
 // logic for handling a new user registration
-userAccountRouter.post('/' , (req,res) => {
+userRouter.post('/' , (req,res) => {
     const {email,first_name,last_name,password } = req.body
     
     pool.query("SELECT * FROM users WHERE email = $1 ", [email],
@@ -60,13 +58,9 @@ userAccountRouter.post('/' , (req,res) => {
  
 
  
-
-
-
-
-userAccountRouter.get('/', (req,res) => {
+userRouter.get('/', (req,res) => {
     res.send('users')
 });
 
 
-module.exports = userAccountRouter;
+module.exports = userRouter;
