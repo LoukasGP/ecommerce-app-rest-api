@@ -15,6 +15,7 @@ require("./db/database");
 app.use("/", router);
 
 const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
   process.env.NODE_ENV === "development"
     ? console.log(`Development App listening at http://localhost:${port}`)

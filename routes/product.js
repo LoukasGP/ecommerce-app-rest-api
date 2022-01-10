@@ -5,8 +5,6 @@ const addItem = require("../services/productServices");
 const { findByID } = require("../services/productServices");
 productRouter.use(express.json({ extended: false }));
 
-// Create, read, update and delete
-
 //TODO ADD CREATED AND MODIFIED FIELDS
 productRouter.post("/", (req, res) => {
   const { id, name, description, quantity } = req.body;
@@ -17,9 +15,8 @@ productRouter.post("/", (req, res) => {
 });
 
 //READ
-
-productRouter.get("/:id", (req, res) => {
-  pool.query(
+productRouter.get("/:id", async (req, res) => {
+  await pool.query(
     "SELECT * FROM product WHERE id = $1",
     [req.params.id],
     (err, data) => {
@@ -33,56 +30,46 @@ productRouter.get("/:id", (req, res) => {
         },
       });
     }
-    );
-  });
-  
-  //TODO - FIX ERROR HEADER SET ALREADY
-  productRouter.get("/", (req, res) => {
-    pool.query("SELECT * FROM product WHERE quantity > 0;", (err, data) => {
-      if (err) res.status(400).send(err);
-      if (data.rowCount > 0) res.status(200).send(data);
-      return res.status(422).json({
-        error: {
-          status: 417,
-          data: "No Products to show",
-        },
-      });
+  );
+});
+
+//TODO - FIX ERROR HEADER SET ALREADY
+productRouter.get("/", (req, res) => {
+  pool.query("SELECT * FROM product WHERE quantity > 0;", (err, data) => {
+    if (err) res.status(400).send(err);
+    if (data.rowCount > 0) res.status(200).send(data);
+    return res.status(422).json({
+      error: {
+        status: 417,
+        data: "No Products to show",
+      },
     });
   });
-  
-  
-  //UPDATE
-  productRouter.put('/:id', (req, res) => {
-  const productIndex = getIndexById(req.params.id, expressions);
-  if (productIndex !== -1) {
-    updateElement(req.params.id, req.query, expressions);
-    res.send(expressions[productIndex]);
-  } else {
-    res.status(404).send();
+});
+
+//UPDATE
+productRouter.put("/:id", async (req, res) => {
+  const newProduct = req.body;
+  const productId = Number(req.params.id);
+  const products = await pool.query("SELECT * FROM product;");
+  console.log(products);
+  if (!newProduct.id || newProduct.id !== productId) {
+    newProduct.id = productId;
   }
+  products[productId] = newProduct;
+  res.send(newProduct);
+});
 
-    
-  productRouter.put("/:id", (req, res) => {
-    const { id, name, description, quantity } = req.body;
-
-    pool.query(
-      "INSERT INTO product(id, name, description, quantity) VALUES($1, $2, $3, $4)",
-      [id, name, description, quantity]
-    );
-  });
-  
-  //DELETE
-productRouter.delete('/expressions/:id', (req, res, next) => {
-  const expressionIndex = getIndexById(req.params.id, expressions);
-  if (expressionIndex !== -1) {
-    expressions.splice(expressionIndex, 1);
+//DELETE
+productRouter.delete("/:id", async(req, res) => {
+  const productId = Number(req.params.id);
+  const products = await pool.query("SELECT * FROM product;");
+  if (productId !== -1) {
+    products.splice(productId, 1);
     res.status(204).send();
   } else {
     res.status(404).send();
   }
 });
-
-  
-
 
 module.exports = productRouter;
