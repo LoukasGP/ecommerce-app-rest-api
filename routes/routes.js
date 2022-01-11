@@ -1,7 +1,7 @@
 const userAccountRegisterRouter = require('./user');
 const productsRouter = require('./product');
 const cartsRouter = require('./cart');
-const loginRouter = require('./login')
+const {loginRouter} = require('./login')
 
 
 const express = require('express');
