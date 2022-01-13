@@ -112,14 +112,7 @@ loginRouter.post('/' ,function(req, res, next) {
   
 
 
-  const accountRouter = express.Router()
-  loginRouter.use('/account' ,accountRouter)
-
-  accountRouter.get('/' ,ensureAuthentication ,(req,res) => {
-    //this will not be seen
-
-    res.send('secret')
-  })
+  
 
 
-module.exports = loginRouter;
+module.exports = {loginRouter , ensureAuthentication}
