@@ -1,3 +1,4 @@
+const e = require("express");
 const express = require("express");
 const { pool } = require("../config");
 const cartRouter = express.Router();
@@ -28,7 +29,7 @@ cartRouter.get('/' ,ensureAuthentication ,(req,res) => {
 // SQL query for this function: select users.first_name, users.last_name , cart.id as cart_id, product.name as product_name, product.description ,product.quantity from users join cart on users.id = cart.user_id join cart_item on cart.id = cart_item.cart_id join product on product.id = cart_item.product_id
 cartRouter.get('/:cartId',ensureAuthentication ,(req,res) => {
     const requestedCart = Number(req.params.cartId)
-    pool.query('select users.first_name, users.last_name , cart.id as cart_id, product.name as product_name, product.description ,product.quantity from users join cart on users.id = cart.user_id join cart_item on cart.id = cart_item.cart_id join product on product.id = cart_item.product_id WHERE cart.id = $1' , [requestedCart] , 
+    pool.query('select users.first_name, users.last_name , cart.id as cart_id, product.name as product_name, product.description from users join cart on users.id = cart.user_id join cart_item on cart.id = cart_item.cart_id join product on product.id = cart_item.product_id WHERE cart.id = $1' , [requestedCart] , 
     function (err, data){
         if(err){
             console.log(err);
@@ -44,9 +45,85 @@ cartRouter.get('/:cartId',ensureAuthentication ,(req,res) => {
     )
 })
 
+/* place item in the cart 
+ need to check to make sure that item exists first 
+then place it in the cart */
+const getProductByName = (itemName ,done) => {
+    // console.log(itemName) 
+    pool.query( "SELECT * FROM product WHERE name = $1 ", [itemName] ,
+    function(err, result ){
+        if(err){
+            console.log(err);
+            done(err,null)
+        } else {
+            done(null , result)
+        }
+    }  ) 
 
-//edit item quantity
+}
+
+const checkProductInCart = (cartId, productId ,done) => {
+    pool.query("SELECT * FROM cart_item WHERE cart_id = $1 AND product_id = $2 " , [cartId ,productId] ,
+    function (err, result){
+        if(err){
+            console.log(err)
+            done(err,null);
+        } else {
+            done(null,result);
+        }
+    })
+}
+
+// needs to be tested
+cartRouter.post('/:cartId',ensureAuthentication , (req,res) => {
+    const  itemName = req.body.itemName
+    // console.log(itemName)
+      getProductByName(itemName , function(err, result){
+          if(err){
+              throw err
+          } else {
+            if(result.rowCount === 0){
+                res.send("Item is not in the database")
+          } else {
+                pool.query('INSERT INTO cart_item (product_id, cart_id) VALUES ($1 , $2)' ,[ result.rows[0].id , req.params.cartId ],
+                function(err, result){
+                    if(err){
+                        console.log(err)
+                        res.send("There was a problem adding item to your cart")
+                    } else {
+                        res.send("Item added successfully")
+                    }
+                }
+                )
+            }
+          }
+      })
+})
+
 //delete an item from the cart
+cartRouter.delete('/:cartId',ensureAuthentication ,(req,res) =>{
+    const productId = req.body.productId
+    const cartId = req.params.cartId
+    // console.log(productId)
+    checkProductInCart(cartId ,productId ,function(err, result){
+        if(err){
+            throw err
+        } else {
+            if(result.rowCount === 0){
+                res.send("Item is not in this cart")
+            } else {
+                pool.query('DELETE FROM cart_item WHERE product_id = $1' ,[productId] ,function(err,result){
+                    if(err){
+                        console.log(err)
+                        res.send("There was a problem deleting this item")
+                    } else {
+                        res.send("Item deleted successfully")
+                    }
+                })
+            }
+        }
+    } )
+})
 // Checkout
 
 
