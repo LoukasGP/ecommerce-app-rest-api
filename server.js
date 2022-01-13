@@ -1,23 +1,36 @@
-require("dotenv").config();
-// console.log(process.env.PGHOST);
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const routerIndex = require("./routes/routes");
+// const routerIndex = require('./routes/index')
+const passport = require("passport");
 
 app.use(bodyParser.json());
+
+let session = require("express-session");
+const cookieParser = require("cookie-parser");
+const cookieTime = 60000 * 60 * 24;
+//session middleware
+app.use(
+  session({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: cookieTime,
+    },
+  })
+);
+app.use(passport.session());
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const router = require("./routes/routes");
+require("dotenv").config(); //loads the dotenv package
 require("./config");
 require("./db/database");
-
+const router = require("./routes/routes");
 app.use("/", router);
 
 const port = process.env.PORT || 3000;
-
 app.listen(port, () => {
-  process.env.NODE_ENV === "development"
-    ? console.log(`Development App listening at http://localhost:${port}`)
-    : console.log(`Production App listening at ${port}`);
+  console.log(`Example app listening at http://localhost:${port}`);
 });
