@@ -1,53 +1,37 @@
 const express = require("express");
-const userAccountRegisterRouter = express.Router();
-const validateEmail = require("./auth");
-const { pool } = require("../db");
-const bcrypt = require("bcrypt");
+const passport = require("passport");
+const Router = require("express-promise-router");
+const userRouter = new Router();
 
-// logic for handling a new user registration
-userAccountRegisterRouter.post("/", (req, res) => {
-  const { email, first_name, last_name, password } = req.body;
+const { users } = require("../controllers");
 
-  pool.query(
-    "SELECT * FROM users WHERE email = $1 ",
-    [email],
-    function (err, data) {
-      console.log(data);
-      if (err) {
-        console.log(err);
-      } else {
-        if (data.rowCount > 0) {
-          return res.status(422).json({
-            error: {
-              status: 422,
-              data: "User with this email already exists.",
-            },
-          });
-        } else if (validateEmail(email) === false) {
-          return res.status(422).json({
-            error: { status: 422, data: "Email address is not valid" },
-          });
-        } else {
-          bcrypt.hash(password, 10, function (err, hash) {
-            pool.query(
-              "INSERT INTO users (email,first_name,last_name,password ) VALUES ($1, $2 , $3 , $4)",
-              [email, first_name, last_name, hash],
-              (err) => {
-                if (err) {
-                  throw err;
-                }
-                res
-                  .status(201)
-                  .json({ status: "success", message: "Account added." });
-              }
-            );
-          });
-        }
-      }
-    }
-  );
-});
+const {
+  validatePutUser,
+  validateDeleteUser,
+} = require("./validation/validation");
 
-userAccountRegisterRouter.get("/", (req, res) => {});
+userRouter
+  .get(
+    "/",
+    passport.authenticate("jwt-admin", { session: false }),
+    users.getAllUsers
+  )
+  .get(
+    "/self",
+    passport.authenticate("jwt-customer", { session: false }),
+    users.getUserSelf
+  ) //Customer can access their user info
+  .put(
+    "/self",
+    validatePutUser,
+    passport.authenticate("jwt-customer", { session: false }),
+    users.putUserSelf
+  ) //Customer can edit their user info
+  .delete(
+    "/:id",
+    validateDeleteUser,
+    passport.authenticate("jwt-admin", { session: false }),
+    users.deleteUser
+  ); //Delete user and associated cart
 
-module.exports = userAccountRegisterRouter;
+module.exports = userRouter;

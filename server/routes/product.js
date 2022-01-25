@@ -31,5 +31,4 @@ productRouter
     passport.authenticate("jwt-admin", { session: false }),
     products.deleteProduct
   );
-
 module.exports = productRouter;

@@ -1,6 +1,5 @@
-const { userService, cartService } = require("../services");
-const { fetchAllUsers, fetchUserById, modifyUser, removeUser } = usersService;
-const { removeCart, fetchCartById } = cartsService;
+const { fetchAllUsers, fetchUserById, modifyUser, removeUser } = require("../services").userService;
+const { removeCart, fetchCartById } = require("../services").cartService;
 
 const getAllUsers = async (req, res, next) => {
   const users = await fetchAllUsers();
@@ -18,7 +17,7 @@ const getUserSelf = async (req, res, next) => {
 //putUserSelf updates most fields of self
 const putUserSelf = async (req, res, next) => {
   const id = req.user.id; //Extract self user id from passport user object
-  const { id, email, first_name, last_name } =
+  const { email, first_name, last_name } =
     req.body;
   const user = {
     id,

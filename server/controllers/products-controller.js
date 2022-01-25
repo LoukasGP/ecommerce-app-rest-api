@@ -1,4 +1,3 @@
-const { productsService } = require("../services");
 const { validationResult } = require("express-validator");
 const {
   fetchProducts,
@@ -6,7 +5,7 @@ const {
   createProduct,
   modifyProduct,
   removeProduct,
-} = productsService;
+} = require("../services").productService;
 
 const getAllProducts = async (req, res, next) => {
   const products = await fetchProducts();
@@ -53,7 +52,7 @@ const putProduct = async (req, res, next) => {
     id,
     name,
     description,
-    quantity
+    quantity,
   };
   await modifyProduct(product);
   res.sendStatus(200);

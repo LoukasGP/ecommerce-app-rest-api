@@ -1,8 +1,26 @@
 const express = require("express");
-const orderRouter = express.Router();
+const Router = require("express-promise-router");
+const orderRouter = new Router()
 
-orderRouter.get('/', (req,res) => {
-    res.send('orders')
-});
+const { orders } = require("../controllers");
+const { validateOrder } = require("./validation/validation");
 
-module.exports = orderRouter
+orderRouter
+  .get(
+    "/",
+    passport.authenticate("jwt-admin", { session: false }),
+    orders.getAllOrders
+  ) //Gets all orders for all users
+  .get(
+    "/review/:orderId",
+    validateOrder,
+    passport.authenticate("jwt-admin", { session: false }),
+    orders.getOrderById
+  ) //Gets one order
+  .get(
+    "/self",
+    passport.authenticate("jwt-customer", { session: false }),
+    orders.getOrdersSelf
+  ); //Gets all orders for current user
+
+module.exports = orderRouter;

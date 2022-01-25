@@ -58,7 +58,6 @@ const modifyUserDb = async ({
   return res.rows[0];
 };
 
-//Keep user record in db for record-keeping but set active = false
 const removeUserDb = async (id) => {
   const res = await pool.query(
     "DELETE user WHERE id = $1",
