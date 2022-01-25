@@ -1,7 +1,6 @@
 const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
-// const routerIndex = require('./routes/index')
 const passport = require('passport');
 
 app.use(bodyParser.json());
@@ -26,9 +25,9 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 
 require('dotenv').config() //loads the dotenv package
-require('./config')
-require('./db/database')
-const router = require('./routes/routes')
+require('./server/config')
+require('./server/db/database')
+const router = require('./server/routes/routes')
 app.use('/', router)
 
 const port = process.env.PORT || 3000

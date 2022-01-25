@@ -35,6 +35,7 @@ const { DB } = require('./config');
         id INT,
         name VARCHAR(100),
         description VARCHAR(250),
+        price INT NOT NULL,
         created getDate(),
         modified TIMESTAMP,
         PRIMARY KEY (id)

@@ -1,0 +1,11 @@
+INSERT INTO product (id, name, description, price) VALUES (5, "BTS Book", "A Book about BTS greatest hits", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (6, "BLACKPINK", "A Book about BLACKPINK", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (7, "EXO", "A Book about EXO", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (8, "BIGBANG", "A Book about BIGBANG", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (9, "Girls' Generation", "A Book about Girls", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (10, "Red Velvet", "A Book about Red Velvet", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (11, "TWICE", "A Book about TWICE", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (12, "IU", "A Book about IU", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (13, "BoA", "A Book about BoA", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (14, "Super Junior", "A Book about Super Junior", 140.00);
+INSERT INTO product (id, name, description, price) VALUES (15, "Wonder Girls", "A Book about Wonder Girls", 140.00);
