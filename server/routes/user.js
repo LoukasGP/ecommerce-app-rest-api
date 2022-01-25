@@ -1,7 +1,7 @@
 const express = require("express");
 const userAccountRegisterRouter = express.Router();
 const validateEmail = require("./auth");
-const { pool } = require("../config");
+const { pool } = require("../db");
 const bcrypt = require("bcrypt");
 
 // logic for handling a new user registration

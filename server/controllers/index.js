@@ -6,10 +6,10 @@ const orders = require("./orders-controller");
 const payment = require("./payment-controller");
 
 module.exports = {
-//   auth,
-  products
-//   users,
-//   carts,
-//   orders,
-//   payment,
+  auth,
+  products,
+  users,
+  carts,
+  orders,
+  payment,
 };

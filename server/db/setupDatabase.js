@@ -60,10 +60,14 @@ const { DB } = require('./config');
       const cartTable = `
       CREATE TABLE IF NOT EXISTS cart (
         id INT,
+        user_id INT,
         created getDate(),
         modified TIMESTAMP,
         PRIMARY KEY (id)
-      );`
+        CONSTRAINT FK_cart.user_id
+          FOREIGN KEY (user_id)
+            REFERENCES user(id)
+      );`;
     
       const cartItemTable = `
       CREATE TABLE IF NOT EXISTS cart_item (

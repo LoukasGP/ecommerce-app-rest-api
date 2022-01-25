@@ -21,8 +21,6 @@ const fetchCartById = async (userId) => {
       name: cartObj.name,
       price: cartObj.price,
       description: cartObj.description,
-      image_url: cartObj.image_url,
-      status: cartObj.status,
     },
     quantity: cartObj.quantity,
   }));

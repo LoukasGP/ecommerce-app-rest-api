@@ -1,4 +1,4 @@
-const { fetchCartById } = require("./carts.service");
+const { fetchCartById } = require("./cartService");
 const {
   fetchOrdersDb,
   fetchOrderByIdDb,
