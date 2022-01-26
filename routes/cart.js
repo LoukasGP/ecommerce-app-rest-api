@@ -1,4 +1,4 @@
-const e = require("express");
+
 const express = require("express");
 const { pool } = require("../config");
 const cartRouter = express.Router();
@@ -48,9 +48,9 @@ cartRouter.get('/:cartId',ensureAuthentication ,(req,res) => {
 /* place item in the cart 
  need to check to make sure that item exists first 
 then place it in the cart */
-const getProductByName = (itemName ,done) => {
+const getProductByName = (itemId ,done) => {
     // console.log(itemName) 
-    pool.query( "SELECT * FROM product WHERE name = $1 ", [itemName] ,
+    pool.query( "SELECT * FROM product WHERE id = $1 ", [itemId] ,
     function(err, result ){
         if(err){
             console.log(err);
@@ -75,10 +75,10 @@ const checkProductInCart = (cartId, productId ,done) => {
 }
 
 // needs to be tested
-cartRouter.post('/:cartId',ensureAuthentication , (req,res) => {
-    const  itemName = req.body.itemName
+cartRouter.post('/:cartId' , (req,res) => {
+    const  itemId = req.body.itemId
     // console.log(itemName)
-      getProductByName(itemName , function(err, result){
+      getProductByName(itemId, function(err, result){
           if(err){
               throw err
           } else {
@@ -124,7 +124,37 @@ cartRouter.delete('/:cartId',ensureAuthentication ,(req,res) =>{
         }
     } )
 })
+
 // Checkout
+// function addTotal(data){
+//     let price;
+//     let productsPurchased = [];
+// }
+
+cartRouter.get('/:cartId/checkout',ensureAuthentication ,(req,res) =>{
+    // a total would also be added up as well
+    const requestedCart = Number(req.params.cartId)
+    pool.query('select users.first_name, users.last_name , cart.id as cart_id, product.name as product_name, product.description ,product.price,product.quantity from users join cart on users.id = cart.user_id join cart_item on cart.id = cart_item.cart_id join product on product.id = cart_item.product_id WHERE cart.id = $1',[requestedCart],
+    function(err,data){
+      if(err){
+          console.log(err)
+      } else {
+        //   console.log(data)
+        let price = 0 ;
+        let productsPurchased =[];
+        for(let i=0 ; i< data.rows.length ; i++){
+            
+            price = price + parseInt(data.rows[i].price);
+            console.log(parseInt(data.rows[i].price))
+            productsPurchased.push(data.rows[i].product_name)
+            
+        }
+        const sendMe = [price,productsPurchased]
+        res.send(sendMe)
+      }
+    })
+})
+
 
 
 module.exports = cartRouter;
