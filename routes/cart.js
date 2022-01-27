@@ -125,11 +125,7 @@ cartRouter.delete('/:cartId',ensureAuthentication ,(req,res) =>{
     } )
 })
 
-// Checkout
-// function addTotal(data){
-//     let price;
-//     let productsPurchased = [];
-// }
+
 
 cartRouter.get('/:cartId/checkout',ensureAuthentication ,(req,res) =>{
     // a total would also be added up as well
